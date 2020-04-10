@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:flutter_cupertino_date_picker/flutter_th_cupertino_date_picker.dart';
 
 class DatePickerBottomSheet extends StatefulWidget {
   DatePickerBottomSheet({Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class _DatePickerBottomSheetState extends State<DatePickerBottomSheet> {
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
   List<DateTimePickerLocale> _locales = DateTimePickerLocale.values;
 
-  String _format = 'yyyy-MMMM-dd';
+  String _format = 'yyyy-MMM-dd';
   TextEditingController _formatCtrl = TextEditingController();
 
   DateTime _dateTime;

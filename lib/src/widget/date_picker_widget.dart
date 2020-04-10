@@ -44,27 +44,32 @@ class DatePickerWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _DatePickerWidgetState(
-      this.minDateTime, this.maxDateTime, this.initialDateTime);
+      this.minDateTime, this.maxDateTime, this.initialDateTime, this.locale);
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
   DateTime _minDateTime, _maxDateTime;
+  DateTimePickerLocale _locale;
   int _currYear, _currMonth, _currDay;
   List<int> _yearRange, _monthRange, _dayRange;
+  List<int> _viewYearRange = new List();
   FixedExtentScrollController _yearScrollCtrl, _monthScrollCtrl, _dayScrollCtrl;
 
   Map<String, FixedExtentScrollController> _scrollCtrlMap;
   Map<String, List<int>> _valueRangeMap;
+  Map<String, List<int>> _viewValueRangeMap;
 
   bool _isChangeDateRange = false;
 
   _DatePickerWidgetState(
-      DateTime minDateTime, DateTime maxDateTime, DateTime initialDateTime) {
+      DateTime minDateTime, DateTime maxDateTime, DateTime initialDateTime, DateTimePickerLocale locale) {
+    this._locale = locale;
     // handle current selected year、month、day
     DateTime initDateTime = initialDateTime ?? DateTime.now();
     this._currYear = initDateTime.year;
     this._currMonth = initDateTime.month;
     this._currDay = initDateTime.day;
+
 
     // handle DateTime range
     this._minDateTime = minDateTime ?? DateTime.parse(DATE_PICKER_MIN_DATETIME);
@@ -95,7 +100,15 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       'M': _monthScrollCtrl,
       'd': _dayScrollCtrl
     };
+//    _viewYearRange = _yearRange;
+    _viewYearRange.add(_yearRange.first);
+    _viewYearRange.add(_yearRange.last);
+    if(_locale == DateTimePickerLocale.th) {
+      _viewYearRange.first = _viewYearRange.first+543;
+      _viewYearRange.last = _viewYearRange.last+543;
+    }
     _valueRangeMap = {'y': _yearRange, 'M': _monthRange, 'd': _dayRange};
+    _viewValueRangeMap = {'y': _viewYearRange, 'M': _monthRange, 'd': _dayRange};
   }
 
   @override
@@ -162,9 +175,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   /// find item value range by specified format
   List<int> _findPickerItemRange(String format) {
     List<int> valueRange;
-    _valueRangeMap.forEach((key, value) {
+    _viewValueRangeMap.forEach((key, value) {
       if (format.contains(key)) {
         valueRange = value;
+//        if ('y' == key) {
+//          valueRange.first = valueRange.first+543;
+//          valueRange.last = valueRange.last+543;
+//        }
       }
     });
     return valueRange;
@@ -291,8 +308,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       _monthRange = monthRange;
       _dayRange = dayRange;
 
-      _valueRangeMap['M'] = monthRange;
-      _valueRangeMap['d'] = dayRange;
+      _viewValueRangeMap['M'] = monthRange;
+      _viewValueRangeMap['d'] = dayRange;
     });
 
     if (monthRangeChanged) {

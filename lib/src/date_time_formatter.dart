@@ -160,14 +160,15 @@ class DateTimeFormatter {
   /// format month text
   static String _formatMonth(
       int value, String format, DateTimePickerLocale locale) {
-    List<String> months = DatePickerI18n.getLocaleMonths(locale);
     if (format.contains('MMMM')) {
+      List<String> months = DatePickerI18n.getLocaleMonths(locale);
       // MMMM: the full name of month, e.g. January
       return format.replaceAll('MMMM', months[value - 1]);
     } else if (format.contains('MMM')) {
       // MMM: the short name of month, e.g. Jan
-      String month = months[value - 1];
-      return format.replaceAll('MMM', month.substring(0, min(3, month.length)));
+      List<String> months = DatePickerI18n.getLocaleMonths(locale, false);
+      return format.replaceAll('MMM', months[value - 1]);
+//      return format.replaceAll('MMM', month.substring(0, min(3, month.length)));
     }
     return _formatNumber(value, format, 'M');
   }

@@ -13,6 +13,7 @@ part 'strings_de.dart';
 part 'strings_ko.dart';
 part 'strings_it.dart';
 part 'strings_hu.dart';
+part 'strings_th.dart';
 
 abstract class _StringsI18n {
   const _StringsI18n();
@@ -25,6 +26,8 @@ abstract class _StringsI18n {
 
   /// Get the name of month
   List<String> getMonths();
+
+  List<String> getMonthsShort();
 
   /// Get the full name of week
   List<String> getWeeksFull();
@@ -72,6 +75,9 @@ enum DateTimePickerLocale {
 
   /// Hungarian (HU)
   hu,
+
+  /// Thailand (TH)
+  th,
 }
 
 /// Default value of date locale
@@ -92,6 +98,7 @@ const Map<DateTimePickerLocale, _StringsI18n> datePickerI18n = {
   DateTimePickerLocale.ko: const _StringsKo(),
   DateTimePickerLocale.it: const _StringsIt(),
   DateTimePickerLocale.hu: const _StringsHu(),
+  DateTimePickerLocale.th: const _StringsTh(),
 };
 
 class DatePickerI18n {
@@ -112,14 +119,28 @@ class DatePickerI18n {
   }
 
   /// Get locale month array
-  static List<String> getLocaleMonths(DateTimePickerLocale locale) {
+  static List<String> getLocaleMonths(DateTimePickerLocale locale,
+  [bool isFull = true]) {
     _StringsI18n i18n = datePickerI18n[locale] ??
         datePickerI18n[DATETIME_PICKER_LOCALE_DEFAULT];
-    List<String> months = i18n.getMonths();
+    if (isFull) {
+      List<String> months = i18n.getMonths();
+      if (months != null && months.isNotEmpty) {
+        return months;
+      }
+      return datePickerI18n[DATETIME_PICKER_LOCALE_DEFAULT].getMonths();
+    }
+    List<String> months = i18n.getMonthsShort();
     if (months != null && months.isNotEmpty) {
       return months;
     }
-    return datePickerI18n[DATETIME_PICKER_LOCALE_DEFAULT].getMonths();
+    List<String> fulMonths = i18n.getMonths();
+    if (fulMonths != null && fulMonths.isNotEmpty) {
+      return fulMonths
+          .map((item) => item.substring(0, min(3, item.length)))
+          .toList();
+    }
+    return datePickerI18n[DATETIME_PICKER_LOCALE_DEFAULT].getMonthsShort();
   }
 
   /// Get locale week array

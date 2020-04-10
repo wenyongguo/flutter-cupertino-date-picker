@@ -33,6 +33,11 @@ class _StringsRu extends _StringsI18n {
   }
 
   @override
+  List<String> getMonthsShort() {
+    return null;
+  }
+
+  @override
   List<String> getWeeksFull() {
     return [
       "Понедельник",

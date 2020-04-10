@@ -33,6 +33,11 @@ class _StringsKo extends _StringsI18n {
   }
 
   @override
+  List<String> getMonthsShort() {
+    return null;
+  }
+
+  @override
   List<String> getWeeksFull() {
     return [
       "월요일",
